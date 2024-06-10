@@ -33,11 +33,8 @@ const SearchBooks = () => {
       if (!searchInput) {
         return false;
       }
-      // GraphQL API uses 'fetch'
       try {
-        const response = await fetch(
-          `https://www.googleapis.com/books/v1/volumes?q=${searchInput}`
-        );
+        const response = await searchGoogleBooks(searchInput); 
   
         if (!response.ok) {
           throw new Error('something went wrong!');
@@ -52,6 +49,7 @@ const SearchBooks = () => {
           description: book.volumeInfo.description,
           image: book.volumeInfo.imageLinks?.thumbnail || '',
         }));
+
         // save searched books to react State
         setSearchedBooks(bookData);
         // clear the search input field
@@ -75,9 +73,16 @@ const SearchBooks = () => {
   
       try {
         await saveBook({
-          variables: { newBook: { ...bookToSave } },
+          variables: {book: bookToSave},
+          update: cache => {
+            const {me} = cache.readQuery({ query: GET_ME });
+            // console.log(me)
+            // console.log(me.savedBooks)
+            cache.writeQuery({ query: GET_ME , data: {me: { ...me, savedBooks: [...me.savedBooks, bookToSave] } } })
+          }
         });
   
+
         // if book successfully saves to user's account, save book id to state
         setSavedBookIds([...savedBookIds, bookToSave.bookId]);
       } catch (err) {
