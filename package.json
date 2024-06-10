@@ -2,10 +2,10 @@
   "name": "booksearchengine",
   "description": "Book Search Engine",
   "version": "1.0.0",
-  "main": "server/server.js",
+  "main": "server.js",
   "scripts": {
     "server": "nodemon server.js --ignore client",
-    "start": "node server/server.js",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
