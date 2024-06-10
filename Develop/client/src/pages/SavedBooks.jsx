@@ -11,9 +11,17 @@ import { GET_ME } from '../utils/queries';
 
 const SavedBooks = () => {
   const { loading, data } = useQuery(GET_ME);
-  const [removeBook, { error }] = useMutation(REMOVE_BOOK);
-  
+  const [deleteBook, { error }] = useMutation(REMOVE_BOOK);
   const userData = data?.me || {};
+
+  if(!userData?.username) {
+    return (
+      <h4>
+        Please log in to see this page. Use the navigation above to sign up or log in!
+      </h4>
+    );
+  }
+
 
   // function to delete book from database
   const handleDeleteBook = async (bookId) => {
@@ -25,11 +33,18 @@ const SavedBooks = () => {
 
     // new code
     try {
-    const response = await removeBook({ variables: { bookId } });
-        console.log('Deleted record: ', response);
-        if (error) {
-          console.log(error);
+      await deleteBook({
+        variables: {bookId: bookId},
+        update: cache => {
+          const data = cache.readQuery({ query: GET_ME });
+          const userDataCache = data.me;
+          const savedBooksCache = userDataCache.savedBooks;
+          const updatedBookCache = savedBooksCache.filter((book) => book.bookId !== bookId);
+          data.me.savedBooks = updatedBookCache;
+          cache.writeQuery({ query: GET_ME , data: {data: {...data.me.savedBooks}}})
         }
+      });
+      
       // also remove from Localstorage
       removeBookId(bookId);
     } catch (err) {

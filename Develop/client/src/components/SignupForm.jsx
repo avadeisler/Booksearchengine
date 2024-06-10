@@ -17,17 +17,7 @@ const SignupForm = () => {
 
   // added
 
-  const [addUser, { error }] = useMutation(ADD_USER);
-  
-  useEffect(() => {
-    if (error) {
-      setShowAlert(true);
-    } else {
-      setShowAlert(false);
-    }
-  }, [error]);
-
-  //
+  const [createUser] = useMutation(ADD_USER);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -54,7 +44,8 @@ const SignupForm = () => {
       Auth.login(data.addUser.token);
     } catch (err) {
       console.error(err);
-    };
+      setShowAlert(true);
+    }
 
     setUserFormData({
       username: '',

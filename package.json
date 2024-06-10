@@ -1,0 +1,20 @@
+{
+
+  "name": "booksearchengine",
+  "description": "## Your Task",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-client": "^2.6.10",
+    "graphql": "^15.8.0"
+  },
+  "devDependencies": {
+    "concurrently": "^5.1.0"
+  }
+}

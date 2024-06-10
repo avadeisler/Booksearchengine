@@ -39,13 +39,11 @@ const LoginForm = () => {
       event.stopPropagation();
     }
 
-    // changed this section up
-
+  
     try {
-      const response = await loginUser({
-        variables: {...userFormData}
+      const { data } = await loginUser({
+        variables: {...userFormData} 
       });
-      console.log(response)
 
       Auth.login(response.data.login.token);
     } catch (err) {
@@ -54,6 +52,7 @@ const LoginForm = () => {
     }
 
     setUserFormData({
+      username:'',
       email: '',
       password: '',
     });
